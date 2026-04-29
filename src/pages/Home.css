@@ -5,3 +5,28 @@
     min-height: 100vh;
     width: 100%;
 }
+
+.fondoPrincipal2 {
+    background: radial-gradient(circle at bottom right, #1B1E3F, #7C3AED);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.input {
+    border-radius: 10px 10px 0 0;
+    background-color: #f4eeff;
+    color: #1B1E3F;
+    padding: 10px;
+    padding-left: 15px;
+    width: 280px;
+    border-bottom: #1B1E3F solid 3px;
+}
+
+.btn {
+    background: linear-gradient(to right, #35B6D3, #474FA5);
+    border-radius: 20px;
+    height: 60px;
+    width: 200px;
+}
