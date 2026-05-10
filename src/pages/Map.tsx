@@ -24,7 +24,7 @@ const Map: React.FC = () => {
                         </Popup>
                     </Marker>
                 </MapContainer>
-                <IonMenuButton style={{ position: 'absolute', top: 16, left: 50, zIndex: 1000, padding: 0, border: 'none', background: 'transparent' }}>
+                <IonMenuButton style={{ position: 'absolute', top: 5, left: 50, zIndex: 1000, padding: 0, border: 'none', background: 'transparent', height: '100px', width: '100px' }}>
                     <img src='src/imgs/MAP_LOGO.png' alt='MAP Logo' className='w-[80px] h-[80px] rounded-full ' />
                 </IonMenuButton>
                 <IonButton style={{ position: 'absolute', top: 820, left: 350, zIndex: 1000, padding: 0, border: 'none', '--background': 'radial-gradient(circle at bottom right, #1B1E3F, #7C3AED)', '--border-radius': '200px', width: '60px', height: '60px' }}>
