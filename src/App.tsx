@@ -35,6 +35,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import NuevaCancion from './pages/NuevaCancion';
 
 setupIonicReact();
 
@@ -53,6 +54,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/map">
           <Map />
+        </Route>
+        <Route exact path="/nuevacancion">
+          <NuevaCancion />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />
