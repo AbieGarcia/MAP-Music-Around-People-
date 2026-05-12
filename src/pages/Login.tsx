@@ -1,8 +1,32 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { useIonRouter, IonInput, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useHistory } from "react-router";
+import { signInWithEmailAndPassword as loginUsuario } from "firebase/auth";
+import { auth } from '../firebaseConfig'; // Importamos la conexión
+import { useState } from 'react';
 import './Home.css';
 
 const Login: React.FC = () => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const history = useHistory();
+    const router = useIonRouter();
+
+    //Comprueba con la base de datos que exista el usuario e inicia secion
+    const handleLogin = async () => {
+        try {
+            await loginUsuario(auth, email, password);
+            alert("Bienvenido de nuevo");
+            router.push("/map");
+        } catch (error: any) {
+            if (error.code === 'auth/user-notfound' || error.code === 'auth/wrong-password') {
+                alert("Correo o contraseña incorrectos");
+            } else {
+                alert("Error al iniciar sesion");
+            }
+        }
+    }
+
     return (
         <IonPage>
             <IonContent fullscreen>
@@ -16,11 +40,11 @@ const Login: React.FC = () => {
                             <h1 className='text-white font-bold text-5xl mt-[5px] shadow-lg'>LOGIN</h1>
                         </div>
                         <div className='flex flex-col align-center h-[50%] w-[100%] self-center mt-5'>
-                            <form className='flex flex-col gap-10 mt-5 self-center'>
-                                <input type='text' placeholder='Correo' className='input'></input>
-                                <input type='password' placeholder='Contraseña' className='input'></input>
-                                <button type='submit' className='btn text-3xl italic self-center'>Login</button>
-                            </form>
+                            <div className='flex flex-col gap-10 mt-5 self-center'>
+                                <IonInput type='text' placeholder='Correo' className='input' value={email} onIonChange={e => setEmail(e.detail.value!)}></IonInput>
+                                <IonInput type='password' placeholder='Contraseña' className='input' value={password} onIonChange={e => setPassword(e.detail.value!)}></IonInput>
+                                <button className='btn text-3xl italic self-center' onClick={handleLogin}>Login</button>
+                            </div>
                         </div>
                         <div className='self-center mt-[-40px]'>
                             <p className='italic font-thin'>¿Sin una cuenta? <a href='/register' className='text-[#1B1E3F] underline font-bold '>  Regístrate 🎵</a></p>

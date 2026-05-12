@@ -12,7 +12,7 @@ const Menu: React.FC = () => {
 
     const location = useLocation(); // sirve para ver cual pestaña esta activa y cual item del menú está activo
     const menuOpc = [
-        { title: 'Perfil', url: '/', icon: personOutline },
+        { title: 'Perfil', url: '/profile', icon: personOutline },
         { title: 'Canciones', url: '/', icon: musicalNote },
         { title: 'MusicMatch', url: '/', icon: peopleOutline },
         { title: 'Mapa', url: '/map', icon: globeOutline },

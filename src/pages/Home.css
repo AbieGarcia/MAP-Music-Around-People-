@@ -18,8 +18,7 @@
     border-radius: 10px 10px 0 0;
     background-color: #f4eeff;
     color: #1B1E3F;
-    padding: 10px;
-    padding-left: 15px;
+    --padding-start: 15px;
     width: 280px;
     border-bottom: #1B1E3F solid 3px;
 }
