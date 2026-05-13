@@ -61,7 +61,6 @@ const NuevaCancion: React.FC = () => {
 
       <IonContent fullscreen>
         <div className='fondoPrincipal2'>
-
             <IonSearchbar
             placeholder="Buscar canción..."
             debounce={800}
@@ -76,7 +75,7 @@ const NuevaCancion: React.FC = () => {
             </div>
             )}
 
-            <IonList className='fondoPrincipal2'>
+            <IonList>
             {results.map((track) => {
                 const isPlaying = playingId === track.id;
                 

@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 
+
 import legacy from '@vitejs/plugin-legacy'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -14,5 +15,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
+  },
+  server: {
+    proxy: {
+      '/deezer': {
+        target: 'https://api.deezer.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/deezer/, ''),
+      }
+    }
   }
 })
