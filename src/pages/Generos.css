@@ -28,3 +28,7 @@
 .otro{
     background: radial-gradient(circle at top left, #DADADA, #BABABA);
 }
+
+#btn:active{
+    background: radial-gradient(circle at top left, #011c66, #500249);
+}
