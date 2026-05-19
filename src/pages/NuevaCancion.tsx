@@ -8,6 +8,7 @@ import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig'; // Importamos la conexión
 
+import './Generos.css';
 import './Home.css';
 import MainLayout from '../components/MainLayout';
 
@@ -82,31 +83,31 @@ const NuevaCancion: React.FC = () => {
     };
   };
 
-  // const agregarCancion = async () => {
-  //   try {
-  //     const position = await Geolocation.getCurrentPosition();
-  //     const { latitude, longitude } = position.coords;
-  //     setCoords({ lat: latitude, lng: longitude });
+  const agregarCancion = async () => {
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+      setCoords({ lat: latitude, lng: longitude });
 
-  //     await setDoc(doc(db, "Canciones"), {
-  //       Id: cancion?.id,
-  //       Album: cancion?.album.title,
-  //       Artista: cancion?.artist.name,
-  //       Duracion: formatDuration(cancion?.duration || 0),
-  //       Genero: genero,
-  //       Img: cancion?.album.cover_medium,
-  //       Titulo: cancion?.title,
-  //       Ubicacion: coords,
-  //       Usuario: usuario.Nombre,
-  //     });
-  //     alert("canción agregada con éxito");
+      await setDoc(doc(db, "Canciones"), {
+        Id: cancion?.id,
+        Album: cancion?.album.title,
+        Artista: cancion?.artist.name,
+        Duracion: formatDuration(cancion?.duration || 0),
+        Genero: genero,
+        Img: cancion?.album.cover_medium,
+        Titulo: cancion?.title,
+        Ubicacion: coords,
+        Usuario: usuario.Nombre,
+      });
+      alert("canción agregada con éxito");
 
-  //   }
-  //   catch (e) {
-  //     console.error("error añadiendo el documento:", e);
+    }
+    catch (e) {
+      console.error("error añadiendo el documento:", e);
 
-  //   }
-  // }
+    }
+  }
 
   return (
     <MainLayout title='nuevaCancion'>
@@ -149,7 +150,7 @@ const NuevaCancion: React.FC = () => {
                       togglePlay(track);
                       setCancion(track);
                     }}
-                    color={isPlaying ? 'dark' : undefined}
+                    color={isPlaying ? 'light' : undefined}
                   >
                     <IonThumbnail slot="start">
                       <IonImg src={track.album.cover_medium} alt={track.album.title} />
@@ -179,12 +180,40 @@ const NuevaCancion: React.FC = () => {
                 );
               })}
             </IonList>
+            {cancion!=null && 
+          <>
             <IonButton className='btn2' id='open-modal' expand="block">Agregar Canción</IonButton>
 
-            <IonModal ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
-              <div className="block">Block of Content</div>
-            </IonModal>
+            <IonModal className='modal' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+              <div className='flex flex-col gap-5'>
+                <div className='self-center text-center text-white bg-[#1B1E3F] mt-5 py-5 px-2 rounded-[20px] w-[350px] font-bold text-2xl '>
+                  <h1>ELIGE EL GÉNERO MUSICAL</h1>
+                </div>
+                <div className='flex flex-col self-center gap-4'>
+                  <div className='flex flex-row self-center gap-2'>
+                    <button className='pop w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("pop")}>POP</button>
+                    <button className='rock w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rock")}>ROCK</button>
+                    <button className='EDM w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("EDM")}>EDM</button>
+                    <button className='rap w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rap")}>RAP</button>
+                  </div>
+                  <div className='flex flex-row self-center gap-2'>
+                    <button className='indie w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("indie")}>INDIE</button>
+                    <button className='country w-[100px] h-[70px] rounded-lg font-bold text-white text-xl' onClick={e => setGenero("country")}>COUNTRY</button>
+                    <button className='jazz w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("jazz")}>JAZZ</button>
+                    <button className='mx w-[100px] h-[70px] rounded-lg font-bold text-white text-lg' onClick={e => setGenero("mx")}>REGIONAL MX</button>
+                  </div>
+                  <div className='flex flex-row self-center gap-2'>
+                      <button className='kpopo w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("kpop")}>K-POP</button>
+                      <button className='otro w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("otro")}>OTRO</button>
+                  </div>
+                </div>
+                <button className='btn text-2xl italic self-center mt-4 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
+              </div>
+              console.log("Holi")
 
+            </IonModal>
+          </>
+            }
           </div>
         </div>
       </IonContent>

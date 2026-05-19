@@ -37,5 +37,6 @@
 }
 
 ion-modal {
-    --height: 300px;
+    --height: 500px;
+    --background: rgba(181, 143, 231, 0.295);
 }

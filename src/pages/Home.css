@@ -34,9 +34,11 @@
     --background: linear-gradient(to right, #c09eff, #7C3AED);
     border-radius: 20px;
     height: 60px;
-    width: 300px;
+    width: 250px;
     --color: white;
     font-size: 20px;
     font-style: italic;
     margin-bottom: 20px;
+    position: fixed;
+    margin-top: 800px;
 }
