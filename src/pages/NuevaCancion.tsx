@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { IonContent, IonMenuButton, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem, IonThumbnail, IonLabel, IonImg, IonIcon, IonText } from '@ionic/react';
+import React, { useState, useRef } from 'react';
+import { IonContent, IonMenuButton, IonHeader, IonButton, IonPage, IonTitle, IonToolbar, IonModal, IonSearchbar, IonList, IonItem, IonThumbnail, IonLabel, IonImg, IonIcon, IonText } from '@ionic/react';
 import { playCircleOutline, stopCircleOutline, musicalNoteOutline } from 'ionicons/icons';
 import { searchTracks, Track } from '../service/DeezerMusic';
 import './NuevaCancion.css';
@@ -12,6 +12,7 @@ import './Home.css';
 import MainLayout from '../components/MainLayout';
 
 const NuevaCancion: React.FC = () => {
+  const modal = useRef<HTMLIonModalElement>(null);
   const [results, setResults] = useState<Track[]>([]);
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
   const [playingId, setPlayingId] = useState<number | null>(null);
@@ -113,7 +114,7 @@ const NuevaCancion: React.FC = () => {
       <IonContent fullscreen>
         <div className='fondoPrincipal2'>
           <div className='fondoPrincipal3'>
-            <div className='text-center text-white bg-blue-900 mt-10 py-5 px-2 rounded-[20px] w-[290px] font-bold text-4xl '>
+            <div className='text-center text-white bg-[#1B1E3F] mt-10 py-5 px-2 rounded-[20px] w-[290px] font-bold text-4xl '>
               <h1>NUEVA CANCIÓN</h1>
             </div>
 
@@ -133,57 +134,64 @@ const NuevaCancion: React.FC = () => {
               </div>
             )}
 
-            <IonList>
+            <IonList className='lista_cont'>
               {results.map((track) => {
                 const isPlaying = playingId === track.id;
 
                 return (
-                  <div className='lista'>
 
-                    <IonItem
-                      key={track.id}
-                      button
-                      onClick={() => {
-                        togglePlay(track);
-                        setCancion(track);
-                      }}
-                      color={isPlaying ? 'light' : undefined}
-                    >
-                      <IonThumbnail slot="start">
-                        <IonImg src={track.album.cover_medium} alt={track.album.title} />
-                      </IonThumbnail>
 
-                      <IonLabel>
-                        <h2 style={{
-                          fontWeight: isPlaying ? 'bold' : 'normal',
-                          color: isPlaying ? 'var(--ion-color-success)' : undefined
-                        }}>
-                          {track.title}
-                        </h2>
-                        <p>{track.artist.name}</p>
-                        <IonText color="medium">
-                          <small>{formatDuration(track.duration)}</small>
-                        </IonText>
-                      </IonLabel>
+                  <IonItem
+                    className='lista'
+                    key={track.id}
+                    button
+                    onClick={() => {
+                      togglePlay(track);
+                      setCancion(track);
+                    }}
+                    color={isPlaying ? 'dark' : undefined}
+                  >
+                    <IonThumbnail slot="start">
+                      <IonImg src={track.album.cover_medium} alt={track.album.title} />
+                    </IonThumbnail>
 
-                      <IonIcon
-                        slot="end"
-                        icon={isPlaying ? stopCircleOutline : playCircleOutline}
-                        color={isPlaying ? 'danger' : 'success'}
-                        style={{ fontSize: '28px' }}
-                      />
-                    </IonItem>
-                  </div>
+                    <IonLabel>
+                      <h2 style={{
+                        fontSize: '19px',
+                        fontWeight: isPlaying ? 'bold' : 'normal',
+                        color: isPlaying ? '#2a1474' : undefined
+                      }}>
+                        {track.title}
+                      </h2>
+                      <p style={{ color: isPlaying ? '#2a1474' : '#ffff' }}>{track.artist.name}</p>
+                      <small>{formatDuration(track.duration)}</small>
+
+                    </IonLabel>
+
+                    <IonIcon
+                      slot="end"
+                      icon={isPlaying ? stopCircleOutline : playCircleOutline}
+                      color={isPlaying ? 'danger' : 'success'}
+                      style={{ fontSize: '28px' }}
+                    />
+                  </IonItem>
+
                 );
               })}
             </IonList>
+            <IonButton className='btn2' id='open-modal' expand="block">Agregar Canción</IonButton>
+
+            <IonModal ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+              <div className="block">Block of Content</div>
+            </IonModal>
+
           </div>
         </div>
       </IonContent>
       <IonMenuButton style={{ position: 'absolute', top: 5, left: 10, zIndex: 1000, padding: 0, border: 'none', background: 'transparent', height: '100px', width: '100px' }}>
         <img src='src/imgs/MAP_LOGO.png' alt='MAP Logo' className='w-[80px] h-[80px] rounded-full ' />
       </IonMenuButton>
-    </MainLayout>
+    </MainLayout >
   );
 };
 
