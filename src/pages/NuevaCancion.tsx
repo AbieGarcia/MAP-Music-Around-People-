@@ -4,7 +4,7 @@ import { playCircleOutline, stopCircleOutline, musicalNoteOutline } from 'ionico
 import { searchTracks, Track } from '../service/DeezerMusic';
 import './NuevaCancion.css';
 import { Geolocation } from '@capacitor/geolocation';      // Sensor GPS
-import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, addDoc, collection } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig'; // Importamos la conexión
 
@@ -86,10 +86,10 @@ const NuevaCancion: React.FC = () => {
   const agregarCancion = async () => {
     try {
       const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      setCoords({ lat: latitude, lng: longitude });
+      const newCoords = { lat: position.coords.latitude, lng: position.coords.longitude };
+      setCoords(newCoords);
 
-      await setDoc(doc(db, "Canciones"), {
+      await addDoc(collection(db, "Canciones"), {
         Id: cancion?.id,
         Album: cancion?.album.title,
         Artista: cancion?.artist.name,
@@ -97,8 +97,8 @@ const NuevaCancion: React.FC = () => {
         Genero: genero,
         Img: cancion?.album.cover_medium,
         Titulo: cancion?.title,
-        Ubicacion: coords,
-        Usuario: usuario.Nombre,
+        Ubicacion: newCoords,
+        Usuario: usuario?.Nombre,
       });
       alert("canción agregada con éxito");
 
@@ -180,39 +180,38 @@ const NuevaCancion: React.FC = () => {
                 );
               })}
             </IonList>
-            {cancion!=null && 
-          <>
-            <IonButton className='btn2' id='open-modal' expand="block">Agregar Canción</IonButton>
+            {cancion != null &&
+              <>
+                <IonButton className='btn2' id='open-modal' expand="block">Agregar Canción</IonButton>
 
-            <IonModal className='modal' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
-              <div className='flex flex-col gap-5'>
-                <div className='self-center text-center text-white bg-[#1B1E3F] mt-5 py-5 px-2 rounded-[20px] w-[350px] font-bold text-2xl '>
-                  <h1>ELIGE EL GÉNERO MUSICAL</h1>
-                </div>
-                <div className='flex flex-col self-center gap-4'>
-                  <div className='flex flex-row self-center gap-2'>
-                    <button className='pop w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("pop")}>POP</button>
-                    <button className='rock w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rock")}>ROCK</button>
-                    <button className='EDM w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("EDM")}>EDM</button>
-                    <button className='rap w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rap")}>RAP</button>
+                <IonModal className='modal' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+                  <div className='flex flex-col gap-5'>
+                    <div className='self-center text-center text-white bg-[#1B1E3F] mt-5 py-5 px-2 rounded-[20px] w-[350px] font-bold text-2xl '>
+                      <h1>ELIGE EL GÉNERO MUSICAL</h1>
+                    </div>
+                    <div className='flex flex-col self-center gap-4'>
+                      <div className='flex flex-row self-center gap-2'>
+                        <button className='pop w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("pop")}>POP</button>
+                        <button className='rock w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rock")}>ROCK</button>
+                        <button className='EDM w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("EDM")}>EDM</button>
+                        <button className='rap w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rap")}>RAP</button>
+                      </div>
+                      <div className='flex flex-row self-center gap-2'>
+                        <button className='indie w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("indie")}>INDIE</button>
+                        <button className='country w-[100px] h-[70px] rounded-lg font-bold text-white text-xl' onClick={e => setGenero("country")}>COUNTRY</button>
+                        <button className='jazz w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("jazz")}>JAZZ</button>
+                        <button className='mx w-[100px] h-[70px] rounded-lg font-bold text-white text-lg' onClick={e => setGenero("mx")}>REGIONAL MX</button>
+                      </div>
+                      <div className='flex flex-row self-center gap-2'>
+                        <button className='kpopo w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("kpop")}>K-POP</button>
+                        <button className='otro w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("otro")}>OTRO</button>
+                      </div>
+                    </div>
+                    <button className='btn text-2xl italic self-center mt-4 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
                   </div>
-                  <div className='flex flex-row self-center gap-2'>
-                    <button className='indie w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("indie")}>INDIE</button>
-                    <button className='country w-[100px] h-[70px] rounded-lg font-bold text-white text-xl' onClick={e => setGenero("country")}>COUNTRY</button>
-                    <button className='jazz w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("jazz")}>JAZZ</button>
-                    <button className='mx w-[100px] h-[70px] rounded-lg font-bold text-white text-lg' onClick={e => setGenero("mx")}>REGIONAL MX</button>
-                  </div>
-                  <div className='flex flex-row self-center gap-2'>
-                      <button className='kpopo w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("kpop")}>K-POP</button>
-                      <button className='otro w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("otro")}>OTRO</button>
-                  </div>
-                </div>
-                <button className='btn text-2xl italic self-center mt-4 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
-              </div>
-              console.log("Holi")
 
-            </IonModal>
-          </>
+                </IonModal>
+              </>
             }
           </div>
         </div>
