@@ -21,6 +21,8 @@ const NuevaCancion: React.FC = () => {
   const [usuario, setUsuario] = useState<any>(null);
   const [cancion, setCancion] = useState<Track | null>(null);
   const [genero, setGenero] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [isSelected, setIsSelected] = useState(false)
 
   // useEffect (() =>{
@@ -105,12 +107,16 @@ const NuevaCancion: React.FC = () => {
         Ubicacion: newCoords,
         Usuario: usuario?.Nombre,
       });
-      alert("canción agregada con éxito");
+      modal.current?.dismiss();
+      setSuccessMessage("Canción agregada con éxito ✨");
+      setShowSuccessModal(true);
 
     }
     catch (e) {
       console.error("error añadiendo el documento:", e);
-
+      modal.current?.dismiss();
+      setSuccessMessage("Error al añadir la canción");
+      setShowSuccessModal(true);
     }
   }
 
@@ -218,6 +224,15 @@ const NuevaCancion: React.FC = () => {
                     <button className='btn text-2xl italic self-center mt-1 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
                   </div>
 
+                </IonModal>
+
+                <IonModal isOpen={showSuccessModal} onDidDismiss={() => setShowSuccessModal(false)} className='modal2'>
+                  <div className='flex flex-col gap-5 p-5'>
+                    <div className='self-center text-center text-white bg-[#1B1E3F] mt-5 py-5 px-2 rounded-[20px] w-[300px] font-bold text-2xl'>
+                      <p className='text-center text-white text-lg'>{successMessage}</p>
+                    </div>
+                    <button className='btn text-2xl italic self-center mt-4 text-white' onClick={() => setShowSuccessModal(false)}>Cerrar</button>
+                  </div>
                 </IonModal>
               </>
             }
