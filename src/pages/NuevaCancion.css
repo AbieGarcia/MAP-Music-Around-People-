@@ -36,7 +36,14 @@
     margin-bottom: 20px;
 }
 
-ion-modal {
+.modal {
     --height: 500px;
     --background: rgba(181, 143, 231, 0.295);
+}
+
+.modal2 {
+    --height: 250px;
+    --width: 370px;
+    --border-radius: 40px;
+    --background: rgba(203, 181, 231, 0.548);
 }
