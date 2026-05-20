@@ -3,6 +3,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import './NuevaCancion.css';
 import Menu from '../components/Menu';
+import { searchTracks, Track } from '../service/DeezerMusic';
 import MainLayout from '../components/MainLayout';
 import { MapContainer, TileLayer, useMap, Popup, Marker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
@@ -28,8 +29,11 @@ const Map: React.FC = () => {
     const [coords, setCoords] = useState<{ lat: number, lng: number } | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [canciones, setCanciones] = useState<any[]>([]);
+    const [seleccionTrack, setSeleccionTrack] = useState<Track | null>(null);
     const [seleccion, setSeleccion] = useState<{ Album: string, Artista: string, Duracion: string, Genero: string, Id: number, Img: string, Titulo: string, Usuario: string } | null>(null);
     const router = useIonRouter();
+    const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
+    const [playingId, setPlayingId] = useState<number | null>(null);
 
     // 1. OBTENER CANCIONES EN TIEMPO REAL
     useEffect(() => {
@@ -57,7 +61,50 @@ const Map: React.FC = () => {
         getCurrentPosition();
     }, []);
 
+    const togglePlay = (track: any) => {
+        if (!track || !track.preview) {
+          console.warn('No se puede reproducir: preview no disponible', track);
+          return;
+        }
 
+        if (playingId === track.id && currentAudio) {
+          currentAudio.pause();
+          setCurrentAudio(null);
+          setPlayingId(null);
+          return;
+        }
+    
+        // Pausar cualquier otra canción
+        if (currentAudio) {
+          currentAudio.pause();
+        }
+    
+        // Reproducir — en Deezer track.preview SIEMPRE tiene URL
+        const audio = new Audio(track.preview);
+        audio.play();
+        setCurrentAudio(audio);
+        setPlayingId(track.id);
+    
+        audio.onended = () => {
+          setPlayingId(null);
+          setCurrentAudio(null);
+        };
+    };
+
+    const fetchTrack = async (trackId: any) => {
+        if (!trackId) return;
+
+        try {
+            const response = await fetch(`/deezer/track/${trackId}`);
+            if (!response.ok) {
+                throw new Error(`Fetch Deezer failed: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            setSeleccionTrack(data);
+        } catch (error) {
+            console.error("Error fetching track:", error);
+        }
+    };
 
     return (
         <MainLayout title='Mapa'>
@@ -71,7 +118,6 @@ const Map: React.FC = () => {
                     {coords && <RecenterMap latlng={[coords.lat, coords.lng]} />}
 
                     {canciones.map((c) => {
-                        console.log("Canción:", c);
                         return (
                             <Marker key={c.id} position={c.Ubicacion ? [c.Ubicacion.lat, c.Ubicacion.lng] : [0, 0]} eventHandlers={{
                                 click: () => {
@@ -88,6 +134,7 @@ const Map: React.FC = () => {
                                         Usuario: c.Usuario
                                     };
                                     setSeleccion(nuevaC);
+                                    fetchTrack(nuevaC.Id);
                                 },
                             }}>
                                 <Popup>{c.Titulo}</Popup>
@@ -98,7 +145,17 @@ const Map: React.FC = () => {
                 {seleccion && (
                     <IonModal className={`modal3`} id={seleccion.Genero} isOpen={showModal} onDidDismiss={() => setShowModal(false)} initialBreakpoint={1} breakpoints={[0, 1]}>
                         <div className='flex flex-row mt-[10%] ml-[5%] mr-[5%] gap-6'>
-                            <img src={seleccion.Img} className='w-[200px] rounded-xl '></img>
+                            <img
+                                src={seleccion.Img}
+                                className='w-[200px] rounded-xl '
+                                onClick={() => {
+                                    if (seleccionTrack) {
+                                        togglePlay(seleccionTrack);
+                                    } else {
+                                        console.warn('Track aún no cargado');
+                                    }
+                                }}
+                            />
                             <div className='flex flex-col items-center gap-2'>
                                 <h1 className='text-3xl font-bold text-center'>{seleccion.Titulo}</h1>
                                 <p className='text-center'>{seleccion.Artista}</p>
