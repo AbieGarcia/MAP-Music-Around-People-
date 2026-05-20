@@ -50,7 +50,7 @@ const Profile: React.FC = () => {
                 <IonMenuButton style={{ position: 'absolute', top: 5, left: 10, zIndex: 1000, padding: 0, border: 'none', background: 'transparent', height: '100px', width: '100px' }}>
                     <img src='src/imgs/MAP_LOGO.png' alt='MAP Logo' className='w-[80px] h-[80px] rounded-full ' />
                 </IonMenuButton>
-                <IonButton style={{ position: 'absolute', top: 860, left: 330, zIndex: 1000, padding: 0, border: 'none', '--background': 'radial-gradient(circle at top left, #1B1E3F, #35B6D3)', '--border-radius': '200px', width: '60px', height: '60px' }}>
+                <IonButton routerLink={'/nuevacancion'} style={{ position: 'absolute', top: 860, left: 330, zIndex: 1000, padding: 0, border: 'none', '--background': 'radial-gradient(circle at top left, #1B1E3F, #35B6D3)', '--border-radius': '200px', width: '60px', height: '60px' }}>
                     <p className='text-white font-bold text-6xl'>+</p>
                 </IonButton>
             </div>
