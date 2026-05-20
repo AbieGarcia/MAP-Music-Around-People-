@@ -43,8 +43,8 @@
 
 .modal3 {
     --height: 300px;
-    --background: radial-gradient(circle at top left, #887BFF, #D73AD4);
-
+    display: flex;
+    flex-direction: row;
 
 }
 

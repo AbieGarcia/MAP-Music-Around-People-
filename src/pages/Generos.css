@@ -1,34 +1,83 @@
-.pop{
+.pop {
     background: radial-gradient(circle at top left, #887BFF, #D73AD4);
 }
-.rock{
+
+.rock {
     background: radial-gradient(circle at top left, #FF0004, #1F1F1F);
 }
-.EDM{
+
+.EDM {
     background: radial-gradient(circle at top left, #47D7FF, #00BE4F);
 }
-.rap{
+
+.rap {
     background: radial-gradient(circle at top left, #111111, #A28E4E);
 }
-.indie{
+
+.indie {
     background: radial-gradient(circle at top left, #FF8559, #96D73A);
 }
-.country{
+
+.country {
     background: radial-gradient(circle at top left, #FFE030, #C5780B);
 }
-.jazz{
+
+.jazz {
     background: radial-gradient(circle at top left, #C0C0C0, #0A212C);
 }
-.mx{
+
+.mx {
     background: radial-gradient(circle at top left, #58E26D, #AFAEAE, #EB0018);
 }
-.kpopo{
+
+.kpopo {
     background: radial-gradient(circle at top left, #A608DA, #D5DD00);
 }
-.otro{
+
+.otro {
     background: radial-gradient(circle at top left, #DADADA, #BABABA);
 }
 
-#btn:active{
+#btn:active {
     background: radial-gradient(circle at top left, #011c66, #500249);
+}
+
+#pop {
+    --background: radial-gradient(circle at top left, #887BFF, #D73AD4);
+}
+
+#rock {
+    --background: radial-gradient(circle at top left, #FF0004, #1F1F1F);
+}
+
+#EDM {
+    --background: radial-gradient(circle at top left, #47D7FF, #00BE4F);
+}
+
+#rap {
+    --background: radial-gradient(circle at top left, #111111, #A28E4E);
+}
+
+#indie {
+    --background: radial-gradient(circle at top left, #FF8559, #96D73A);
+}
+
+#country {
+    --background: radial-gradient(circle at top left, #FFE030, #C5780B);
+}
+
+#jazz {
+    --background: radial-gradient(circle at top left, #C0C0C0, #0A212C);
+}
+
+#mx {
+    --background: radial-gradient(circle at top left, #58E26D, #AFAEAE, #EB0018);
+}
+
+#kpopo {
+    --background: radial-gradient(circle at top left, #A608DA, #D5DD00);
+}
+
+#otro {
+    --background: radial-gradient(circle at top left, #DADADA, #BABABA);
 }
