@@ -195,7 +195,7 @@ const NuevaCancion: React.FC = () => {
               <>
                 <IonButton className='btn2' id='open-modal' expand="block">Agregar Canción</IonButton>
 
-                <IonModal className='modal' ref={modal} trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
+                <IonModal className='modal' trigger="open-modal" initialBreakpoint={1} breakpoints={[0, 1]}>
                   <div className='flex flex-col gap-5'>
                     <div className='self-center text-center text-white bg-[#1B1E3F] mt-5 py-5 px-2 rounded-[20px] w-[350px] font-bold text-2xl '>
                       <h1>ELIGE EL GÉNERO MUSICAL</h1>

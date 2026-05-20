@@ -41,6 +41,13 @@
     --background: rgba(181, 143, 231, 0.295);
 }
 
+.modal3 {
+    --height: 300px;
+    --background: radial-gradient(circle at top left, #887BFF, #D73AD4);
+
+
+}
+
 .modal2 {
     --height: 250px;
     --width: 370px;
