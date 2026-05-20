@@ -27,6 +27,7 @@ const Map: React.FC = () => {
     const [coords, setCoords] = useState<{ lat: number, lng: number } | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [canciones, setCanciones] = useState<any[]>([]);
+    const [seleccion, setSeleccion] = useState<{ Album: string, Artista: string, Duracion: string, Genero: string, Id: number, Img: string, Titulo: string, Usuario: string } | null>(null);
 
     // 1. OBTENER CANCIONES EN TIEMPO REAL
     useEffect(() => {
@@ -73,24 +74,38 @@ const Map: React.FC = () => {
                             <Marker key={c.id} position={c.Ubicacion ? [c.Ubicacion.lat, c.Ubicacion.lng] : [0, 0]} eventHandlers={{
                                 click: () => {
                                     setShowModal(true);        // Abrir Modal
-                                    console.log("Lol, canciones:", canciones)
+                                    console.log("Lol, canciones:", canciones);
+                                    const nuevaC = {
+                                        Album: c.Album,
+                                        Artista: c.Artista,
+                                        Duracion: c.Duracion,
+                                        Genero: c.Genero,
+                                        Id: c.Id,
+                                        Img: c.Img,
+                                        Titulo: c.Titulo,
+                                        Usuario: c.Usuario
+                                    };
+                                    setSeleccion(nuevaC);
                                 },
                             }}>
                                 <Popup>{c.Titulo}</Popup>
                             </Marker>
                         );
                     })}
-                    {/* <Marker position={coords ? [coords.lat, coords.lng] : [0, 0]} eventHandlers={{
-                        click: () => {
-                            setShowModal(true);        // Abrir Modal
-                            console.log("Lol, canciones:", canciones)
-                        },
-                    }}>
-                    </Marker> */}
                 </MapContainer>
-                <IonModal className={`modal3`} isOpen={showModal} onDidDismiss={() => setShowModal(false)} initialBreakpoint={1} breakpoints={[0, 1]}>
-
-                </IonModal>
+                {seleccion && (
+                    <IonModal className={`modal3`} id={seleccion.Genero} isOpen={showModal} onDidDismiss={() => setShowModal(false)} initialBreakpoint={1} breakpoints={[0, 1]}>
+                        <div className='flex flex-row mt-[10%] ml-[5%] mr-[5%] gap-5'>
+                            <img src={seleccion.Img} className='w-[200px] rounded-xl '></img>
+                            <div className='flex flex-col items-center'>
+                                <h1>{seleccion.Titulo}</h1>
+                                <p>{seleccion.Artista}</p>
+                                <p>{seleccion.Album}</p>
+                                <p>@{seleccion.Usuario}</p>
+                            </div>
+                        </div>
+                    </IonModal>
+                )}
                 <IonMenuButton style={{ position: 'absolute', top: 5, left: 50, zIndex: 1000, padding: 0, border: 'none', background: 'transparent', height: '100px', width: '100px' }}>
                     <img src='src/imgs/MAP_LOGO.png' alt='MAP Logo' className='w-[80px] h-[80px] rounded-full ' />
                 </IonMenuButton>
