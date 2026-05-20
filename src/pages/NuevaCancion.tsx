@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IonContent, IonMenuButton, IonHeader, IonButton, IonPage, IonTitle, IonToolbar, IonModal, IonSearchbar, IonList, IonItem, IonThumbnail, IonLabel, IonImg, IonIcon, IonText } from '@ionic/react';
 import { playCircleOutline, stopCircleOutline, musicalNoteOutline } from 'ionicons/icons';
 import { searchTracks, Track } from '../service/DeezerMusic';
@@ -23,6 +23,11 @@ const NuevaCancion: React.FC = () => {
   const [genero, setGenero] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isSelected, setIsSelected] = useState(false)
+
+  // useEffect (() =>{
+
+  // )}
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -197,23 +202,26 @@ const NuevaCancion: React.FC = () => {
                     </div>
                     <div className='flex flex-col self-center gap-4'>
                       <div className='flex flex-row self-center gap-2'>
-                        <button className='pop w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("pop")}>POP</button>
-                        <button className='rock w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rock")}>ROCK</button>
-                        <button className='EDM w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("EDM")}>EDM</button>
-                        <button className='rap w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("rap")}>RAP</button>
+                        <button className='pop w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("pop")}>POP</button>
+                        <button className='rock w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("rock")}>ROCK</button>
+                        <button className='EDM w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("EDM")}>EDM</button>
+                        <button className='rap w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("rap")}>RAP</button>
                       </div>
                       <div className='flex flex-row self-center gap-2'>
-                        <button className='indie w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("indie")}>INDIE</button>
-                        <button className='country w-[100px] h-[70px] rounded-lg font-bold text-white text-xl' onClick={e => setGenero("country")}>COUNTRY</button>
-                        <button className='jazz w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("jazz")}>JAZZ</button>
-                        <button className='mx w-[100px] h-[70px] rounded-lg font-bold text-white text-lg' onClick={e => setGenero("mx")}>REGIONAL MX</button>
+                        <button className='indie w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("indie")}>INDIE</button>
+                        <button className='country w-[100px] h-[70px] rounded-lg font-bold text-white text-xl' id="btn" onClick={e => setGenero("country")}>COUNTRY</button>
+                        <button className='jazz w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("jazz")}>JAZZ</button>
+                        <button className='mx w-[100px] h-[70px] rounded-lg font-bold text-white text-lg' id="btn" onClick={e => setGenero("mx")}>REGIONAL MX</button>
                       </div>
                       <div className='flex flex-row self-center gap-2'>
-                        <button className='kpopo w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("kpop")}>K-POP</button>
-                        <button className='otro w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' onClick={e => setGenero("otro")}>OTRO</button>
+                        <button className='kpopo w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("kpop")}>K-POP</button>
+                        <button className='otro w-[100px] h-[70px] rounded-lg font-bold text-white text-2xl' id="btn" onClick={e => setGenero("otro")}>OTRO</button>
                       </div>
                     </div>
-                    <button className='btn text-2xl italic self-center mt-4 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
+                    {genero != null &&
+                      <label className='self-center text-white text-lg'>Género: {genero}</label>
+                    }
+                    <button className='btn text-2xl italic self-center mt-1 text-white' onClick={e => agregarCancion()}>CONFIRMAR</button>
                   </div>
 
                 </IonModal>
