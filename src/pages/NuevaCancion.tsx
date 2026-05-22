@@ -4,7 +4,7 @@ import { playCircleOutline, stopCircleOutline, musicalNoteOutline } from 'ionico
 import { searchTracks, Track } from '../service/DeezerMusic';
 import './NuevaCancion.css';
 import { Geolocation } from '@capacitor/geolocation';      // Sensor GPS
-import { setDoc, doc, getDoc, addDoc, collection } from 'firebase/firestore';
+import { setDoc, doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig'; // Importamos la conexión
 
@@ -28,25 +28,26 @@ const NuevaCancion: React.FC = () => {
   // useEffect (() =>{
 
   // )}
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Usuario logueado
+        const uid = user.uid;
 
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      // Usuario logueado
-      const uid = user.uid;
+        //  Obtener info de Firestore
+        const docRef = doc(db, "Usuarios", uid);
+        const docSnap = await getDoc(docRef);
 
-      //  Obtener info de Firestore
-      const docRef = doc(db, "Usuarios", uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setUsuario(docSnap.data());
+        if (docSnap.exists()) {
+          setUsuario(docSnap.data());
+        } else {
+          console.log("No existe el usuario");
+        }
       } else {
-        console.log("No existe el usuario");
+        // Usuario no logueado
       }
-    } else {
-      // Usuario no logueado
-    }
-  });
+    });
+  }, []);
 
   const handleSearch = async (ev: any) => {
     const query = ev.detail.value;
@@ -105,7 +106,9 @@ const NuevaCancion: React.FC = () => {
         Img: cancion?.album.cover_medium,
         Titulo: cancion?.title,
         Ubicacion: newCoords,
+        UserId: auth.currentUser?.uid,
         Usuario: usuario?.Nombre,
+        Fecha: serverTimestamp(),
       });
       modal.current?.dismiss();
       setSuccessMessage("Canción agregada con éxito ✨");
