@@ -2,8 +2,7 @@ import {
     IonContent, IonIcon, IonItem, IonMenu, IonMenuToggle, IonHeader, IonToolbar
 } from '@ionic/react';
 import {
-    gridOutline, listOutline, addCircleOutline, settingsOutline,
-    logOutOutline, chevronForwardOutline, cubeOutline, personCircleOutline, closeOutline, personOutline, musicalNote, peopleOutline, globeOutline
+    personOutline, musicalNote, peopleOutline, globeOutline
 } from 'ionicons/icons';
 import { useLocation } from 'react-router-dom';
 import React from 'react';
@@ -27,55 +26,55 @@ const Menu: React.FC = () => {
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    // Usuario logueado
-                    const uid = user.uid;
-        
-                    //  Obtener info de Firestore
-                    const docRef = doc(db, "Usuarios", uid);
-                    const docSnap = await getDoc(docRef);
+            if (user) {
+                // Usuario logueado
+                const uid = user.uid;
 
-                    if (docSnap.exists()) {
-                        setUsuarioActual(docSnap.data());
-                    } else {
-                        console.log("No existe el usuario");
-                    }
+                //  Obtener info de Firestore
+                const docRef = doc(db, "Usuarios", uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    setUsuarioActual(docSnap.data());
                 } else {
-                    // Usuario no logueado
+                    console.log("No existe el usuario");
                 }
-            });
+            } else {
+                // Usuario no logueado
+            }
+        });
     }, []);
-    
-        // 
+
+    // 
     useEffect(() => {
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
             if (!user) {
-              setCanciones([]);
-              return;
+                setCanciones([]);
+                return;
             }
-        
+
             const uid = user.uid;
-        
+
             const q = query(collection(db, "Canciones"), where("UserId", "==", uid), orderBy("Fecha", "desc"), limit(1));
-        
+
             const unsubscribeSnapshot = onSnapshot(
-              q,
-              (snapshot) => {
-                const docs = snapshot.docs.map((doc) => ({
-                  id: doc.id,
-                  ...doc.data(),
-                }));
-        
-                setCanciones(docs);
-              },
-              (error) => {
-                console.error("Error", error);
-              }
+                q,
+                (snapshot) => {
+                    const docs = snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                    }));
+
+                    setCanciones(docs);
+                },
+                (error) => {
+                    console.error("Error", error);
+                }
             );
-        
+
             return () => unsubscribeSnapshot();
-          });
-        
+        });
+
 
 
 
@@ -83,10 +82,10 @@ const Menu: React.FC = () => {
 
         // const unsubscribe = onSnapshot(q, (snapshot) => {  //se va a ejecutar cada vez que haya cambios en la colección mensajes, y snapshot es el resultado de la consulta
         //     const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); //transformamos el snapshot en un array de objetos con id y datos
-            
+
         //     setCanciones(docs);
         // });
-        
+
         return () => unsubscribeAuth(); // Limpiamos la conexión al salir
     }, []);
 
@@ -131,15 +130,15 @@ const Menu: React.FC = () => {
                             <p className='font-bold text-white justify-center'>Última canción</p>
                             {canciones[0] ? (
                                 <>
-                                <img
-                                    src={canciones[0].Img}
-                                    alt={canciones[0].Titulo}
-                                    className='w-[100px] h-[100px] rounded-lg mt-4'
-                                />
-                                <p className='text-center text-white mt-2 '>{canciones[0].Titulo} - {canciones[0].Artista}</p>
+                                    <img
+                                        src={canciones[0].Img}
+                                        alt={canciones[0].Titulo}
+                                        className='w-[100px] h-[100px] rounded-lg mt-4'
+                                    />
+                                    <p className='text-center text-white mt-2 '>{canciones[0].Titulo} - {canciones[0].Artista}</p>
                                 </>
                             ) : (
-                                <p className='text-white mt-2'>¡Agrega una canción!</p>
+                                <p className='text-white mt-2 text-center'>¡Agrega una canción!</p>
                             )}
                         </div>
                     </div>
