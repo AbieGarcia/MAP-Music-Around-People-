@@ -9,6 +9,7 @@ import { auth, db } from '../firebaseConfig';
 
 const MusicMatch: React.FC = () => {
     const [canciones, setCanciones] = useState<any[]>([]);
+    const [cancionesParaMatch, setCancionesParaMatch] = useState<any[]>([]);
     const [usuarioActual, setUsuarioActual] = useState<any>(null);
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const MusicMatch: React.FC = () => {
     
                 const uid = user.uid;
     
-                const q = query(collection(db, "Canciones"), where("UserId", "!=", uid), orderBy("UserId", "desc"), orderBy("Fecha", "desc"));
+                const q = query(collection(db, "Canciones"), where("UserId", "!=", uid), orderBy("UserId", "desc"));
     
                 const unsubscribeSnapshot = onSnapshot(
                     q,
@@ -62,6 +63,34 @@ const MusicMatch: React.FC = () => {
             });
             return () => unsubscribeAuth(); // Limpiamos la conexión al salir
         }, []);
+
+        useEffect(() => {
+            if (canciones.length === 0) return;
+            filtrar3canciones();
+            
+          }, [canciones]);
+
+        useEffect(() =>{
+            console.log(cancionesParaMatch)
+        },[cancionesParaMatch]);
+
+        const filtrar3canciones = () => {
+            const agrupado: Record<string, any[]> = {};//Crea un tipo que permite guardar y agrupar las canciones
+
+            canciones.forEach((song) => {
+              const uid = song.UserId;
+              if (!agrupado[uid]) {
+                agrupado[uid] = [];
+              }
+          
+              if (agrupado[uid].length < 3) {
+                agrupado[uid].push(song);
+              }
+            });
+          
+            const resultado = Object.values(agrupado).flat();
+            setCancionesParaMatch(resultado);
+        };
 
     return(
         <MainLayout title="MusicMatch">
