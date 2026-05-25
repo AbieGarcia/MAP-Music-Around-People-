@@ -3,9 +3,11 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NuevaCancion from './pages/NuevaCancion';
 import Register from './pages/Register';
 import Map from './pages/Map';
 import Profile from './pages/Profile';
+import MusicMatch from './pages/MusicMatch';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -36,7 +38,6 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import NuevaCancion from './pages/NuevaCancion';
 
 setupIonicReact();
 
@@ -61,6 +62,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/nuevacancion">
           <NuevaCancion />
+        </Route>
+        <Route exact path="/musicmatch">
+          <MusicMatch />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />

@@ -20,7 +20,7 @@ const Menu: React.FC = () => {
     const menuOpc = [
         { title: 'Perfil', url: '/profile', icon: personOutline },
         { title: 'Canciones', url: '/nuevacancion', icon: musicalNote },
-        { title: 'MusicMatch', url: '/', icon: peopleOutline },
+        { title: 'MusicMatch', url: '/musicmatch', icon: peopleOutline },
         { title: 'Mapa', url: '/map', icon: globeOutline },
     ]
 
@@ -45,7 +45,6 @@ const Menu: React.FC = () => {
         });
     }, []);
 
-    // 
     useEffect(() => {
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
             if (!user) {

@@ -1,0 +1,7 @@
+.fondoPrincipal4 {
+    background: radial-gradient(circle at bottom right, #35B6D3, #1B1E3F);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
