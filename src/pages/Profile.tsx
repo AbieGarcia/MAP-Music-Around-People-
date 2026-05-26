@@ -84,8 +84,8 @@ const Profile: React.FC = () => {
                         <div>
                             {canciones.length != 0 ? (
                                 canciones.map((cancion) => (
-                                    <div key={cancion.id} className={cancion.Genero} style={{ padding: 0, border: 'none', height: '120px', width: '260px', marginTop: '5px', borderRadius: '15px', display: 'flex', flexDirection: 'row', gap: '15px' }}>
-                                        <img src={cancion.Img} alt={cancion.Titulo} className='w-[90px] h-[90px] m-1 mt-4 object-cover rounded-lg'></img>
+                                    <div key={cancion.id} className={cancion.Genero} style={{ padding: 0, border: 'none', height: '120px', width: '260px', marginTop: '5px', borderRadius: '15px', display: 'flex', flexDirection: 'row', gap: '7px', paddingTop: '5px' }}>
+                                        <img src={cancion.Img} alt={cancion.Titulo} className='w-[90px] h-[90px] m-1 mt-2 object-cover rounded-lg'></img>
                                         <div>
                                             <h3 className='text-white font-bold text-lg'>{cancion.Titulo}</h3>
                                             <p className='text-white text-sm font-light'>{cancion.Artista}</p>
