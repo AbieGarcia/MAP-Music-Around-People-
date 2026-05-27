@@ -2,7 +2,7 @@ import { useIonRouter, IonInput, IonButton, IonContent, IonHeader, IonPage, IonT
 import { useHistory } from "react-router";
 import { auth, db } from '../firebaseConfig'; // Importamos la conexión
 import { where, getDoc, doc, collection, onSnapshot, query, orderBy, serverTimestamp, limit } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 import './Home.css';
 import './Generos.css';
@@ -12,6 +12,7 @@ const Profile: React.FC = () => {
 
     const [usuario, setUsuario] = useState<any>(null);
     const [canciones, setCanciones] = useState<any[]>([]);
+    const history = useHistory();
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -66,6 +67,16 @@ const Profile: React.FC = () => {
         return () => unsubscribeAuth(); // Limpiamos la conexión al salir
     }, []);
 
+    const cerrarSesion = async () => {
+        try {
+            await signOut(auth);
+            alert('Has salido de la sesión correctamente');
+            history.push("/login");
+        } catch (error) {
+            console.error("error al cerrar la sesion", error);
+        }
+    };
+
     return (
 
         <MainLayout title='perfil'>
@@ -98,6 +109,8 @@ const Profile: React.FC = () => {
                             )}
                         </div>
                     </div>
+
+                    <button className='font-bold italics text-2xl w-[60vw] h-[50px] mb-10 rounded-xl bg-white text-indigo-900' onClick={cerrarSesion}>Cerrar sesión</button>
                 </div>
                 <IonMenuButton style={{ position: 'absolute', top: 5, left: 10, zIndex: 1000, padding: 0, border: 'none', background: 'transparent', height: '100px', width: '100px' }}>
                     <img src='src/imgs/MAP_LOGO.png' alt='MAP Logo' className='w-[80px] h-[80px] rounded-full ' />
