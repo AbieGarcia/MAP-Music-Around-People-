@@ -12,12 +12,16 @@ import { auth, db } from '../firebaseConfig';
 const MusicMatch: React.FC = () => {
     const [canciones, setCanciones] = useState<any[]>([]);
     const [cancionesParaMatch, setCancionesParaMatch] = useState<any[]>([]);
+    const [cancionesDeezer, setCancionesDeezer] = useState<any[]>([]);
     const [usuarioActual, setUsuarioActual] = useState<any>(null);
     const [cancionActual, setCancionActual] = useState(0);
     const [usuarioMatch, setUsuarioMatch] = useState('');
     const [likes, setLikes] = useState(0);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
+    const [playingId, setPlayingId] = useState<number | null>(null);
+
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -80,6 +84,21 @@ const MusicMatch: React.FC = () => {
         console.log(cancionesParaMatch)
     }, [cancionesParaMatch]);
 
+    const fetchTrack = async (trackId: any) => {
+        if (!trackId) return;
+
+        try {
+            const response = await fetch(`/deezer/track/${trackId}`);
+            if (!response.ok) {
+                throw new Error(`Fetch Deezer failed: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error fetching track:", error);
+        }
+    };
+
     const filtrar3canciones = () => {
         const agrupado: Record<string, any[]> = {};//Crea un tipo que permite guardar y agrupar las canciones
 
@@ -92,13 +111,13 @@ const MusicMatch: React.FC = () => {
             if (agrupado[uid].length < 3) {
                 agrupado[uid].push(song);
             }
+
         });
 
         const resultado = Object.values(agrupado).flat();
         setCancionesParaMatch(resultado);
+
     };
-
-
 
     const like = (song: any) => { // Aquí se maneja la lógica de dar like a una canción
         const uid = song.UserId
@@ -137,6 +156,39 @@ const MusicMatch: React.FC = () => {
         }
     }
 
+    const togglePlay = async (song: any) => {
+        const track = await fetchTrack(song.Id)
+
+
+        if (!track || !track.preview) {
+          console.warn('No se puede reproducir: preview no disponible', track);
+          return;
+        }
+
+        if (playingId === track.id && currentAudio) {
+          currentAudio.pause();
+          setCurrentAudio(null);
+          setPlayingId(null);
+          return;
+        }
+    
+        // Pausar cualquier otra canción
+        if (currentAudio) {
+          currentAudio.pause();
+        }
+    
+        // Reproducir — en Deezer track.preview SIEMPRE tiene URL
+        const audio = new Audio(track.preview);
+        audio.play();
+        setCurrentAudio(audio);
+        setPlayingId(track.id);
+    
+        audio.onended = () => {
+          setPlayingId(null);
+          setCurrentAudio(null);
+        };
+    };
+
     return (
         <MainLayout title="MusicMatch">
             <IonContent fullscreen>
@@ -158,7 +210,13 @@ const MusicMatch: React.FC = () => {
                                 <button onClick={dislike} className="h-[90px] w-[90px] rounded-full p-2" style={{ background: 'linear-gradient( #FFCDCD, #FFFF)' }}>
                                     <IonIcon icon={closeOutline} style={{ color: '#FF7373' }} className="text-7xl self-center" />
                                 </button>
-                                <button>
+                                <button onClick={() => {
+                                    if (cancionesParaMatch[cancionActual]) {
+                                        togglePlay(cancionesParaMatch[cancionActual]);
+                                    } else {
+                                        console.warn('Track aún no cargado');
+                                    }
+                                }}>
                                     <IonIcon icon={playOutline} style={{ color: '#FFFFFF' }} className="text-7xl self-center" />
                                 </button>
                                 <button onClick={(e) => like(cancionesParaMatch[cancionActual])} className="h-[90px] w-[90px] rounded-full pt-3" style={{ background: 'linear-gradient( #A3FFC9, #FFFF)' }}>
