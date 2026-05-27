@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Map from './pages/Map';
 import Profile from './pages/Profile';
 import MusicMatch from './pages/MusicMatch';
+import PrivateRoute from './routes/PrivateRoute';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,30 +46,23 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
+
         <Route exact path="/login">
           <Login />
-        </Route>
-        <Route exact path="/register">
-          <Register />
-        </Route>
-        <Route exact path="/profile">
-          <Profile />
-        </Route>
-        <Route exact path="/map">
-          <Map />
-        </Route>
-        <Route exact path="/nuevacancion">
-          <NuevaCancion />
-        </Route>
-        <Route exact path="/musicmatch">
-          <MusicMatch />
         </Route>
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
+        <Route exact path="/register">
+          <Register />
+        </Route>
+
+        {/*Rutas privadas para no acceder si no hay usuario logueado */}
+        <PrivateRoute exact path="/profile" component={Profile} />
+        <PrivateRoute exact path="/map" component={Map} />
+        <PrivateRoute exact path="/nuevacancion" component={NuevaCancion} />
+        <PrivateRoute exact path="/musicmatch" component={MusicMatch} />
+
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
